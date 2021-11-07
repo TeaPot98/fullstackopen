@@ -105,6 +105,20 @@ const History = (props) => {
   )
 }
 
+const Hello = () => {
+  const hello = (who) => () => {
+      console.log('hello', who)
+    }
+
+  return (
+    <div>
+      <button onClick={hello('world')}>world</button>
+      <button onClick={hello('react')}>react</button>
+      <button onClick={hello('function')}>function</button>
+    </div>
+  )
+}
+
 const App = () => {
   const course = 'Half Stack application development'
   const parts = [
@@ -130,6 +144,7 @@ const App = () => {
       <Total content={parts}/>
       <Counter/>
       <Click/>
+      <Hello/>
     </div>
   )
 }
