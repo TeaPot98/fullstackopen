@@ -46,6 +46,13 @@ const App = () => {
             setNotification(null)
           }, 4000)
         })
+        .catch(error => {
+          setNotification({
+            message: `${error.response.data.error}`,
+            type: 'error'
+          })
+          console.log(error)
+        })
     } else {
       const newNumber = {
         name: newName,
@@ -68,7 +75,13 @@ const App = () => {
             setNotification(null)
           }, 4000)
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          console.log(error.response.data)
+          setNotification({
+            message: `${error.response.data.error}`,
+            type: 'error'
+          })
+        })
     }
   }
 
