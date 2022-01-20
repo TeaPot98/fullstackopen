@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
@@ -14,15 +15,36 @@ const getAll = () => {
 
 const create = async blogObject => {
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
 
   const response = await axios.post(baseUrl, blogObject, config)
   return response.data
 }
 
-export default { 
+const update = async blogObject => {
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const response = await axios.put(baseUrl + `/${blogObject.id}`, blogObject, config)
+  return response.data
+}
+
+const remove = async blogId => {
+  console.log('The id of removed item', blogId)
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const response = await axios.delete(baseUrl + `/${blogId}`, config)
+  return response.data
+}
+
+export default {
   getAll,
   create,
-  setToken 
+  update,
+  remove,
+  setToken
 }
