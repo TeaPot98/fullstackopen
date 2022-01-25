@@ -5,7 +5,7 @@ import blogService from '../services/blogs'
 const Blog = ({ blog, deleteBlog, user }) => {
   const [showDetails, setShowDetails] = useState(false)
   const [blogLikes, setBlogLikes] = useState(blog.likes)
-
+  let userBlog
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -36,11 +36,13 @@ const Blog = ({ blog, deleteBlog, user }) => {
     await deleteBlog(blog)
   }
 
-  const userBlog = user.blogs.find(e => e === blog.id)
+  if (user) {
+    userBlog = user.blogs.find(e => e === blog.id)
+  }
 
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       {blog.title} {blog.author}
       <button onClick={toggleDetailsVisibility}>{showDetails ? 'hide' : 'show'}</button>
       <div style={showWhenVisible}>
