@@ -148,6 +148,66 @@ const App = () => {
     }
   }
 
+<<<<<<< HEAD
+=======
+  const addLike = async (blog, blogLikes, setBlogLikes) => {
+    try {
+      await blogService.update({
+        ...blog,
+        likes: blogLikes + 1
+      })
+      setBlogLikes(blogLikes + 1)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const removeBlog = async blogObject => {
+    try {
+      if (window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) {
+        await blogService.remove(blogObject.id)
+        setBlogs(blogs.filter(b => b.id !== blogObject.id))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const loginForm = () => (
+    <Togglable buttonLabel='log in'>
+      <form onSubmit={handleLogin}>
+        <div>
+          username
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          password
+          <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </Togglable>
+  )
+
+  const blogFormRef = useRef()
+
+  const blogForm = () => (
+    <Togglable buttonLabel='new blog'>
+      <BlogForm createBlog={addBlog}/>
+    </Togglable>
+  )
+
+>>>>>>> 53f36cd198581dab72f27c5972f537c84fa0cd98
   blogs.sort((a, b) => {
     return a.likes - b.likes
   })
@@ -166,7 +226,7 @@ const App = () => {
 
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} deleteBlog={removeBlog} user={user}/>
+        <Blog key={blog.id} blog={blog} deleteBlog={removeBlog} user={user} addLike={addLike}/>
       )}
     </div>
   )
