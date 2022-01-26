@@ -40,6 +40,8 @@ const App = () => {
         password
       })
 
+      console.log('The sent user is >>>> ', user)
+
       window.localStorage.setItem(
         'bloglist-user', JSON.stringify(user)
       )
@@ -71,6 +73,55 @@ const App = () => {
     setUser(null)
   }
 
+
+
+  const removeBlog = async blogObject => {
+    try {
+      if (window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) {
+        await blogService.remove(blogObject.id)
+        setBlogs(blogs.filter(b => b.id !== blogObject.id))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const loginForm = () => (
+    <Togglable buttonLabel='log in'>
+      <form onSubmit={handleLogin}>
+        <div>
+          username
+          <input
+            type="text"
+            id="username"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          password
+          <input
+            type="password"
+            id="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit" id="login-button">login</button>
+      </form>
+    </Togglable>
+  )
+
+  const blogFormRef = useRef()
+
+  const blogForm = () => (
+    <Togglable buttonLabel='new blog' ref={blogFormRef}>
+      <BlogForm createBlog={addBlog}/>
+    </Togglable>
+  )
+
   const addBlog = async blogObject => {
     blogFormRef.current.toggleVisibility()
 
@@ -97,51 +148,6 @@ const App = () => {
     }
   }
 
-  const removeBlog = async blogObject => {
-    try {
-      if (window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) {
-        await blogService.remove(blogObject.id)
-        setBlogs(blogs.filter(b => b.id !== blogObject.id))
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const loginForm = () => (
-    <Togglable buttonLabel='log in'>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </Togglable>
-  )
-
-  const blogFormRef = useRef()
-
-  const blogForm = () => (
-    <Togglable buttonLabel='new blog'>
-      <BlogForm createBlog={addBlog}/>
-    </Togglable>
-  )
-
   blogs.sort((a, b) => {
     return a.likes - b.likes
   })
@@ -152,7 +158,7 @@ const App = () => {
       {user === null ?
         loginForm() :
         <div>
-          <p>{user.name} logged-in</p>
+          <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
           {blogForm()}
         </div>

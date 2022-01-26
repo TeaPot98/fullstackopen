@@ -37,8 +37,14 @@ const BlogForm = ({ createBlog }) => {
     })
   }
 
-  const addBlog = () => {
-    createBlog()
+  const addBlog = async () => {
+    await createBlog(newBlog)
+    setNewBlog({
+      title: '',
+      author: '',
+      url: '',
+      likes: 0
+    })
   }
 
   return (
@@ -47,6 +53,7 @@ const BlogForm = ({ createBlog }) => {
             title:
       <input
         type="text"
+        id="title-input"
         value={newBlog.title}
         name="Title"
         onChange={handleTitleChange}
@@ -55,6 +62,7 @@ const BlogForm = ({ createBlog }) => {
             author:
       <input
         type="text"
+        id="author-input"
         value={newBlog.author}
         name="Author"
         onChange={handleAuthorChange}
@@ -63,6 +71,7 @@ const BlogForm = ({ createBlog }) => {
             url:
       <input
         type="text"
+        id="url-input"
         value={newBlog.url}
         name="Url"
         onChange={handleUrlChange}

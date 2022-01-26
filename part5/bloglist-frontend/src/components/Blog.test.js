@@ -2,8 +2,7 @@
 /* eslint-disable linebreak-style */
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render, fireEvent } from '@testing-library/react'
-import { prettyDOM } from '@testing-library/dom'
+import { render } from '@testing-library/react'
 import Blog from './Blog'
 import blogService from '../services/blogs'
 
