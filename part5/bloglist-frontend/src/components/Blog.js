@@ -1,8 +1,8 @@
 /* eslint-disable linebreak-style */
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
+// import blogService from '../services/blogs'
 
-const Blog = ({ blog, deleteBlog, user }) => {
+const Blog = ({ blog, deleteBlog, user, addLike }) => {
   const [showDetails, setShowDetails] = useState(false)
   const [blogLikes, setBlogLikes] = useState(blog.likes)
   let userBlog
@@ -20,17 +20,17 @@ const Blog = ({ blog, deleteBlog, user }) => {
     setShowDetails(!showDetails)
   }
 
-  const addLike = async () => {
-    try {
-      await blogService.update({
-        ...blog,
-        likes: blog.likes + 1
-      })
-      setBlogLikes(blog.likes + 1)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const addLike = async () => {
+  //   try {
+  //     // await blogService.update({
+  //     //   ...blog,
+  //     //   likes: blogLikes + 1
+  //     // })
+  //     setBlogLikes(blogLikes + 1)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   const removeBlog = async () => {
     await deleteBlog(blog)
@@ -45,11 +45,11 @@ const Blog = ({ blog, deleteBlog, user }) => {
     <div style={blogStyle} className='blog'>
       {blog.title} {blog.author}
       <button onClick={toggleDetailsVisibility}>{showDetails ? 'hide' : 'show'}</button>
-      <div style={showWhenVisible}>
+      <div className='blog-details' style={showWhenVisible}>
         {blog.url}
         <br/>
         likes {blogLikes}
-        <button onClick={addLike}>like</button>
+        <button className='like-button' onClick={() => addLike(blog, blogLikes, setBlogLikes)}>like</button>
         <br/>
         {blog.author}
         <br/>

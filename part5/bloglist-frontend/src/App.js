@@ -97,6 +97,18 @@ const App = () => {
     }
   }
 
+  const addLike = async (blog, blogLikes, setBlogLikes) => {
+    try {
+      await blogService.update({
+        ...blog,
+        likes: blogLikes + 1
+      })
+      setBlogLikes(blogLikes + 1)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const removeBlog = async blogObject => {
     try {
       if (window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) {
@@ -160,7 +172,7 @@ const App = () => {
 
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} deleteBlog={removeBlog} user={user}/>
+        <Blog key={blog.id} blog={blog} deleteBlog={removeBlog} user={user} addLike={addLike}/>
       )}
     </div>
   )
