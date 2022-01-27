@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable linebreak-style */
 import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
@@ -16,18 +17,21 @@ const App = () => {
   const [notification, setNotification] = useState(null)
 
   useEffect(() => {
+    console.log('The blogs are fetched from server in useEffect')
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('bloglist-user')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      console.log(user)
-      blogService.setToken(user.token)
+    if (!user) {
+      const loggedUserJSON = window.localStorage.getItem('bloglist-user')
+      if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        setUser(user)
+        console.log(user)
+        blogService.setToken(user.token)
+      }
     }
   }, [])
 
@@ -86,7 +90,7 @@ const App = () => {
 
     try {
       const returnedBlog = await blogService.create(blogObject)
-      console.log('Returned blog from "addBlog" function >>> ', returnedBlog)
+
       setBlogs(blogs.concat(returnedBlog))
 
       setNotification({
@@ -94,10 +98,10 @@ const App = () => {
         message: `Successfully added blog "${returnedBlog.title}"`
       })
 
-
       setTimeout(() => {
         setNotification(null)
       }, 5000)
+      console.log('Returned blog from "addBlog" function >>> ', returnedBlog)
     } catch (error) {
       console.log(error.response.data)
       setNotification({

@@ -14,6 +14,8 @@ const Blog = ({ blog, deleteBlog, user, addLike }) => {
     marginBottom: 5
   }
 
+  console.log('The blog structure >>>', blog)
+
   const showWhenVisible = { display: showDetails ? '' : 'none' }
 
   const toggleDetailsVisibility = () => {
@@ -37,7 +39,7 @@ const Blog = ({ blog, deleteBlog, user, addLike }) => {
   }
 
   if (user) {
-    userBlog = user.blogs.find(e => e === blog.id)
+    userBlog = user.id === blog.user.id
   }
 
 
