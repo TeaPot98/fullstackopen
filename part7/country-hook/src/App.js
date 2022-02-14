@@ -19,22 +19,27 @@ const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
   useEffect(() => {
-    axios.get(`https://restcountries.com/v2/name/${name}?fullText=true`).then(response => {
-      setCountry(response.data)
-      console.log(response.data)
-      console.log(country)
-    })
+    if (name !== '') {
+      axios.get(`https://restcountries.com/v2/name/${name}?fullText=true`).then(response => {
+        // console.log(response.data)
+        setCountry(response.data.status === 404 ? response.data : response.data[0])
+        // console.log(response.data[0])
+        // console.log(country)
+      })
+    }
   }, [name])
 
   return country
 }
 
 const Country = ({ country }) => {
+  // console.log('The country passed to Country component >>> ', country)
   if (!country) {
     return null
   }
+  // console.log('The name from country', country.name)
 
-  if (!country.found) {
+  if (country.status === 404) {
     return (
       <div>
         not found...
@@ -44,10 +49,10 @@ const Country = ({ country }) => {
 
   return (
     <div>
-      <h3>{country.data.name} </h3>
-      <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div> 
-      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>  
+      <h3>{country.name} </h3>
+      <div>capital {country.capital} </div>
+      <div>population {country.population}</div> 
+      <img src={country.flag} height='100' alt={`flag of ${country.name}`}/>  
     </div>
   )
 }

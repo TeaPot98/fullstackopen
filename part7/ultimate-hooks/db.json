@@ -7,6 +7,14 @@
     {
       "content": "the best featrure ever <3",
       "id": 2
+    },
+    {
+      "content": "my new note",
+      "id": 3
+    },
+    {
+      "content": "my new note",
+      "id": 4
     }
   ],
   "persons": [
@@ -19,6 +27,11 @@
       "name": "kaltsoon",
       "number": "045-2323456",
       "id": 2
+    },
+    {
+      "name": "some person",
+      "number": "12-32423432",
+      "id": 3
     }
   ]
 }
