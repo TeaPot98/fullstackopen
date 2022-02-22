@@ -7,13 +7,15 @@ import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import store from './store'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState(null);
+  // const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     console.log("The blogs are fetched from server in useEffect");
@@ -76,6 +78,10 @@ const App = () => {
     window.localStorage.removeItem("bloglist-user");
     setUser(null);
   };
+
+  const setNotification = notification => {
+    store.dispatch(setNotification(notification))
+  }
 
   const blogFormRef = useRef();
 
@@ -170,7 +176,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification notification={notification} />
+      <Notification/>
       {user === null ? (
         loginForm()
       ) : (

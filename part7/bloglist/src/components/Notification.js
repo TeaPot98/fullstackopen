@@ -1,7 +1,12 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable linebreak-style */
-const Notification = ({ notification }) => {
+
+import store from '../store'
+
+const Notification = () => {
+  const notification = store.getState().notification
+
   if (notification === null) {
     return null;
   } else {
