@@ -37,7 +37,8 @@ const BlogForm = ({ createBlog }) => {
     });
   };
 
-  const addBlog = async () => {
+  const addBlog = async event => {
+    event.preventDefault()
     await createBlog(newBlog);
     setNewBlog({
       title: "",

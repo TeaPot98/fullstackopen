@@ -1,10 +1,12 @@
 /* eslint-disable linebreak-style */
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { likeBlog, deleteBlog } from "../reducers/blogReducer";
 // import blogService from '../services/blogs'
 
-const Blog = ({ blog, deleteBlog, user, addLike }) => {
+const Blog = ({ blogId, user }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const [blogLikes, setBlogLikes] = useState(blog.likes);
+  // const [blogLikes, setBlogLikes] = useState(blog.likes);
   let userBlog;
   const blogStyle = {
     paddingTop: 10,
@@ -13,6 +15,8 @@ const Blog = ({ blog, deleteBlog, user, addLike }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
+  const dispatch = useDispatch()
+  const blog = useSelector(state => state.blogs.find(b => b.id === blogId))
 
   console.log("The blog structure >>>", blog);
 
@@ -34,8 +38,24 @@ const Blog = ({ blog, deleteBlog, user, addLike }) => {
   //   }
   // }
 
-  const removeBlog = async () => {
-    await deleteBlog(blog);
+  const addLike = () => {
+    try {
+      // await blogService.update({
+      //   ...blog,
+      //   likes: blogLikes + 1,
+      // });
+      // setBlogLikes(blogLikes + 1);
+
+      dispatch(likeBlog(blog))
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeBlog = () => {
+    // await deleteBlog(blog);
+    dispatch(deleteBlog(blog.id))
   };
 
   if (user) {
@@ -51,10 +71,10 @@ const Blog = ({ blog, deleteBlog, user, addLike }) => {
       <div className="blog-details" style={showWhenVisible}>
         {blog.url}
         <br />
-        likes {blogLikes}
+        likes {blog.likes}
         <button
           className="like-button"
-          onClick={() => addLike(blog, blogLikes, setBlogLikes)}
+          onClick={() => addLike()}
         >
           like
         </button>

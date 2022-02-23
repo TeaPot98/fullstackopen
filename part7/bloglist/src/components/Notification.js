@@ -2,10 +2,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable linebreak-style */
 
-import store from '../store'
+import { useSelector } from 'react-redux';
 
 const Notification = () => {
-  const notification = store.getState().notification
+  const notification = useSelector(state => state.notification)
 
   if (notification === null) {
     return null;

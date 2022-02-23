@@ -1,6 +1,7 @@
 /* eslint-disable no-debugger */
 /* eslint-disable linebreak-style */
 import React, { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
@@ -8,18 +9,24 @@ import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import store from './store'
-import { setNotification } from './reducers/notificationReducer'
+import { changeNotification } from './reducers/notificationReducer'
+import { initBlogs, createBlog, likeBlog, deleteBlog } from "./reducers/blogReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  // const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   // const [notification, setNotification] = useState(null);
 
+  const dispatch = useDispatch()
+
+  const blogs = useSelector(state => state.blogs)
+
   useEffect(() => {
     console.log("The blogs are fetched from server in useEffect");
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    // blogService.getAll().then((blogs) => setBlogs(blogs));
+    dispatch(initBlogs())
   }, []);
 
   useEffect(() => {
@@ -54,9 +61,6 @@ const App = () => {
         type: "success",
         message: `Successfully logged in as ${user.name}`,
       });
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
     } catch (error) {
       // Implement the error message ??
       setNotification({
@@ -80,7 +84,7 @@ const App = () => {
   };
 
   const setNotification = notification => {
-    store.dispatch(setNotification(notification))
+    dispatch(changeNotification(notification, 3))
   }
 
   const blogFormRef = useRef();
@@ -95,52 +99,26 @@ const App = () => {
     blogFormRef.current.toggleVisibility();
 
     try {
-      const returnedBlog = await blogService.create(blogObject);
+      // const returnedBlog = await blogService.create(blogObject);
 
-      setBlogs(blogs.concat(returnedBlog));
+      // setBlogs(blogs.concat(returnedBlog));
+
+      dispatch(createBlog(blogObject))
+
+      console.log('The log from addBlog function >> ')
 
       setNotification({
         type: "success",
         message: `Successfully added blog "${returnedBlog.title}"`,
       });
-
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
       console.log('Returned blog from "addBlog" function >>> ', returnedBlog);
     } catch (error) {
-      console.log(error.response.data);
+      console.log('The error from addBlog >>> ', error)
+      console.log(error);
       setNotification({
         type: "error",
-        message: `${error.response.data.error}`,
+        message: `${error}`,
       });
-    }
-  };
-
-  const addLike = async (blog, blogLikes, setBlogLikes) => {
-    try {
-      await blogService.update({
-        ...blog,
-        likes: blogLikes + 1,
-      });
-      setBlogLikes(blogLikes + 1);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const removeBlog = async (blogObject) => {
-    try {
-      if (
-        window.confirm(
-          `Remove blog ${blogObject.title} by ${blogObject.author}`
-        )
-      ) {
-        await blogService.remove(blogObject.id);
-        setBlogs(blogs.filter((b) => b.id !== blogObject.id));
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -191,10 +169,8 @@ const App = () => {
       {blogs.map((blog) => (
         <Blog
           key={blog.id}
-          blog={blog}
-          deleteBlog={removeBlog}
+          blogId={blog.id}
           user={user}
-          addLike={addLike}
         />
       ))}
     </div>

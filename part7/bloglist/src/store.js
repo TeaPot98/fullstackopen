@@ -1,7 +1,17 @@
-import { createStore } from 'redux'
+import { applyMiddleware, createStore, combineReducers } from 'redux'
+import thunk from 'redux-thunk'
+import blogReducer from './reducers/blogReducer'
 import notificationReducer from './reducers/notificationReducer'
 
-const store = createStore(notificationReducer)
+const reducer = combineReducers({
+    blogs: blogReducer,
+    notification: notificationReducer
+})
+
+const store = createStore(
+    reducer,
+    applyMiddleware(thunk)
+)
 
 store.subscribe(() => {
     const storeNow = store.getState()

@@ -32,6 +32,7 @@ const update = async (blogObject) => {
     blogObject,
     config
   );
+  // console.log('The response from update >> ', response.data)
   return response.data;
 };
 
