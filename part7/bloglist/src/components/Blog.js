@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, deleteBlog } from "../reducers/blogReducer";
+import { Link } from "react-router-dom";
 // import blogService from '../services/blogs'
 
 const Blog = ({ blogId, user }) => {
@@ -64,11 +65,11 @@ const Blog = ({ blogId, user }) => {
 
   return (
     <div style={blogStyle} className="blog">
-      {blog.title} {blog.author}
-      <button onClick={toggleDetailsVisibility}>
+      <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
+      {/* <button onClick={toggleDetailsVisibility}>
         {showDetails ? "hide" : "show"}
-      </button>
-      <div className="blog-details" style={showWhenVisible}>
+      </button> */}
+      {/* <div className="blog-details" style={showWhenVisible}>
         {blog.url}
         <br />
         likes {blog.likes}
@@ -82,7 +83,7 @@ const Blog = ({ blogId, user }) => {
         {blog.author}
         <br />
         {userBlog ? <button onClick={removeBlog}>remove</button> : <></>}
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,32 +1,46 @@
 /* eslint-disable no-debugger */
 /* eslint-disable linebreak-style */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  BrowserRouter as Router, 
+  Routes, Route, Link, useNavigate
+} from 'react-router-dom'
+
 import Blog from "./components/Blog";
+import BlogDetails from "./components/BlogDetails";
 import Notification from "./components/Notification";
-import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
+import LoginForm from "./components/LoginForm";
+import Users from './components/Users'
+import User from './components/User'
+
 import blogService from "./services/blogs";
-import loginService from "./services/login";
-import store from './store'
+
 import { changeNotification } from './reducers/notificationReducer'
-import { initBlogs, createBlog, likeBlog, deleteBlog } from "./reducers/blogReducer";
+import { initBlogs, createBlog } from "./reducers/blogReducer";
+import { getAllUsers, saveUser } from "./reducers/userReducer";
+
 
 const App = () => {
   // const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  
   const [user, setUser] = useState(null);
   // const [notification, setNotification] = useState(null);
 
   const dispatch = useDispatch()
 
   const blogs = useSelector(state => state.blogs)
+  
+  const padding = {
+    padding: 5
+  }
 
   useEffect(() => {
     console.log("The blogs are fetched from server in useEffect");
     // blogService.getAll().then((blogs) => setBlogs(blogs));
     dispatch(initBlogs())
+    dispatch(getAllUsers())
   }, []);
 
   useEffect(() => {
@@ -35,118 +49,17 @@ const App = () => {
       if (loggedUserJSON) {
         const user = JSON.parse(loggedUserJSON);
         setUser(user);
+        dispatch(saveUser(user))
         console.log(user);
         blogService.setToken(user.token);
       }
     }
   }, []);
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-
-      console.log("The sent user is >>>> ", user);
-
-      window.localStorage.setItem("bloglist-user", JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
-      setUsername("");
-      setPassword("");
-      setNotification({
-        type: "success",
-        message: `Successfully logged in as ${user.name}`,
-      });
-    } catch (error) {
-      // Implement the error message ??
-      setNotification({
-        type: "error",
-        message: `Login failed: ${error.response.data.error}`,
-      });
-      console.error(error.response.data.error);
-    }
-
-    console.log(
-      "Logging with: Username >>> ",
-      username,
-      " Password >>> ",
-      password
-    );
-  };
-
   const handleLogout = () => {
     window.localStorage.removeItem("bloglist-user");
     setUser(null);
   };
-
-  const setNotification = notification => {
-    dispatch(changeNotification(notification, 3))
-  }
-
-  const blogFormRef = useRef();
-
-  const blogForm = () => (
-    <Togglable buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm createBlog={addBlog} />
-    </Togglable>
-  );
-
-  const addBlog = async (blogObject) => {
-    blogFormRef.current.toggleVisibility();
-
-    try {
-      // const returnedBlog = await blogService.create(blogObject);
-
-      // setBlogs(blogs.concat(returnedBlog));
-
-      dispatch(createBlog(blogObject))
-
-      console.log('The log from addBlog function >> ')
-
-      setNotification({
-        type: "success",
-        message: `Successfully added blog "${returnedBlog.title}"`,
-      });
-      console.log('Returned blog from "addBlog" function >>> ', returnedBlog);
-    } catch (error) {
-      console.log('The error from addBlog >>> ', error)
-      console.log(error);
-      setNotification({
-        type: "error",
-        message: `${error}`,
-      });
-    }
-  };
-
-  const loginForm = () => (
-    <Togglable buttonLabel="log in">
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </Togglable>
-  );
 
   blogs.sort((a, b) => {
     return a.likes - b.likes;
@@ -155,24 +68,49 @@ const App = () => {
   return (
     <div>
       <Notification/>
-      {user === null ? (
-        loginForm()
-      ) : (
-        <div>
-          <p>{user.name} logged in</p>
-          <button onClick={handleLogout}>logout</button>
-          {blogForm()}
-        </div>
-      )}
-
+      <div>
+        <Link style={padding} to='/'>blogs</Link>
+        <Link style={padding} to='/users'>users</Link>
+        {user === null ? (
+          <Link style={padding} to='/login'>log in</Link>
+        ) : (
+          <span>
+            <span>{user.name} logged in</span>
+            <button onClick={handleLogout}>logout</button>
+          </span>
+        )}
+      </div>
       <h2>blogs</h2>
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blogId={blog.id}
-          user={user}
+      
+      <Routes>
+        <Route path='users' element={<Users />} />
+        <Route 
+          path='/' 
+          element={
+            <div>
+              {<BlogForm />}
+              {blogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blogId={blog.id}
+                user={user}
+              />
+              ))}
+            </div>
+          }/>
+        <Route
+          path='/users/:id'
+          element={<User />}
         />
-      ))}
+        <Route 
+          path='/blogs/:id'
+          element={<BlogDetails />}
+        />
+        <Route 
+          path='/login'
+          element={<LoginForm />}
+        />
+      </Routes>
     </div>
   );
 };
