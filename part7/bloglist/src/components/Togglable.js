@@ -1,6 +1,9 @@
 /* eslint-disable linebreak-style */
 import React, { useState, useImperativeHandle } from "react";
 import PropTypes from "prop-types";
+import {
+  Button
+} from '@mui/material'
 
 // This component uses `props.children` feature.
 // It makes possible to nest another components inside this one
@@ -29,11 +32,11 @@ const Togglable = React.forwardRef((props, ref) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+        <Button variant='contained' onClick={toggleVisibility}>{props.buttonLabel}</Button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <Button color="error" variant='outlined' onClick={toggleVisibility}>cancel</Button>
       </div>
     </div>
   );

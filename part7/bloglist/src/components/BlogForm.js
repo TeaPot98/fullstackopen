@@ -1,10 +1,14 @@
 /* eslint-disable linebreak-style */
 import React, { useState, useRef } from "react";
-import PropTypes from "prop-types";
 import Togglable from "./Togglable";
 import { useDispatch } from "react-redux";
 import { changeNotification } from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogReducer";
+import {
+  TextField,
+  Button,
+  Box
+} from '@mui/material'
 
 const BlogForm = () => {
   const [newBlog, setNewBlog] = useState({
@@ -82,36 +86,50 @@ const BlogForm = () => {
 
   return (
     <Togglable buttonLabel="new blog" ref={blogFormRef}>
-      <form onSubmit={addBlog}>
-        <h2>create new</h2>
-        title:
-        <input
-          type="text"
-          id="title-input"
-          value={newBlog.title}
-          name="Title"
-          onChange={handleTitleChange}
-        />
-        <br />
-        author:
-        <input
-          type="text"
-          id="author-input"
-          value={newBlog.author}
-          name="Author"
-          onChange={handleAuthorChange}
-        />
-        <br />
-        url:
-        <input
-          type="text"
-          id="url-input"
-          value={newBlog.url}
-          name="Url"
-          onChange={handleUrlChange}
-        />
-        <button type="submit">save</button>
-      </form>
+      <Box sx={{
+        '& button': { m: 1 }
+      }}>
+        <form onSubmit={addBlog}>
+          <h2>create new</h2>
+          <TextField
+            id="outlined-basic"
+            label="Title"
+            type="text"
+            size="small"
+            margin="dense"
+            id="title-input"
+            value={newBlog.title}
+            name="Title"
+            onChange={handleTitleChange}
+          />
+          <br />
+          <TextField
+            id="outlined-basic"
+            label="Author"
+            type="text"
+            size="small"
+            margin="dense"
+            id="author-input"
+            value={newBlog.author}
+            name="Author"
+            onChange={handleAuthorChange}
+          />
+          <br />
+          <TextField
+            id="outlined-basic"
+            label="Url"
+            type="text"
+            size="small"
+            margin="dense"
+            id="url-input"
+            value={newBlog.url}
+            name="Url"
+            onChange={handleUrlChange}
+          />
+          <br/>
+          <Button variant="outlined"  type="submit">save</Button>
+        </form>
+      </Box>
     </Togglable>
   );
 };
