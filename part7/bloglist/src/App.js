@@ -10,6 +10,7 @@ import {
 import Blog from "./components/Blog";
 import BlogDetails from "./components/BlogDetails";
 import Notification from "./components/Notification";
+import NavigationBar from "./components/NavigationBar";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
 import Users from './components/Users'
@@ -67,21 +68,8 @@ const App = () => {
 
   return (
     <div>
+      <NavigationBar user={user} handleLogout={handleLogout} />
       <Notification/>
-      <div>
-        <Link style={padding} to='/'>blogs</Link>
-        <Link style={padding} to='/users'>users</Link>
-        {user === null ? (
-          <Link style={padding} to='/login'>log in</Link>
-        ) : (
-          <span>
-            <span>{user.name} logged in</span>
-            <button onClick={handleLogout}>logout</button>
-          </span>
-        )}
-      </div>
-      <h2>blogs</h2>
-      
       <Routes>
         <Route path='users' element={<Users />} />
         <Route 
