@@ -1,20 +1,29 @@
-interface CoursePartOne {
-  name: "Fundamentals";
+interface CoursePartBase {
+  name: string;
   exerciseCount: number;
-  description: string;
+  type: string;
 }
 
-interface CoursePartTwo {
-  name: "Using props to pass data";
-  exerciseCount: number;
+interface CourseNormalPart extends CoursePartBase {
+  type: "normal";
+  description?: string;
+}
+
+interface CourseProjectPart extends CoursePartBase {
+  type: "groupProject";
   groupProjectCount: number;
 }
 
-interface CoursePartThree {
-  name: "Deeper type usage";
-  exerciseCount: number;
-  description: string;
+interface CourseSubmissionPart extends CoursePartBase {
+  type: "submission";
+  description?: string;
   exerciseSubmissionLink: string;
 }
 
-export type CoursePart = CoursePartOne | CoursePartTwo | CoursePartThree;
+interface CourseSpecialPart extends CoursePartBase {
+  type: "special";
+  description?: string;
+  requirements: string[];
+}
+
+export type CoursePart = CourseNormalPart | CourseProjectPart | CourseSubmissionPart | CourseSpecialPart;
