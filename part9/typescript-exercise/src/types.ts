@@ -1,3 +1,5 @@
+// We could use "type" instead of "interface". There will be the same effect. But if we define two interfaces with the same name, they will be merged. With two types with the same name we will get an error.
+
 interface CoursePartBase {
   name: string;
   exerciseCount: number;

@@ -8,6 +8,7 @@ const parsePatientEntry = (object: any): NewPatient => {
     ssn: parseSSN(object.ssn),
     gender: parseGender(object.gender),
     occupation: parseOccupation(object.occupation),
+    entries: [],
     // "id": "d2773336-f723-11e9-8f0b-362b9e155667",
       // "name": "John McClane",
       // "dateOfBirth": "1986-07-09",
