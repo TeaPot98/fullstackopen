@@ -9,6 +9,8 @@ import { Patient } from "../types";
 
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import EntryDetails from "../components/EntryDetails";
 
 const PatientDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +20,7 @@ const PatientDetailsPage = () => {
   useEffect(() => {
     const getPatient = async () => {
       try {
-        if (id !== undefined && patient !== null && patient.ssn === undefined) {
+        if (id !== undefined && patient !== null && patient !== undefined && patient.ssn === undefined) {
           const {data: patient} = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           dispatch(addPatient(patient));
@@ -31,7 +33,7 @@ const PatientDetailsPage = () => {
   }, []);
 
 
-  return patient !== null ? (
+  return patient !== undefined && patient !== null ? (
     <>
       <h2>
         {patient.name}
@@ -39,6 +41,20 @@ const PatientDetailsPage = () => {
       </h2>
       <div>ssh: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
+      <h2>entries</h2>
+      {patient.entries && patient.entries.map<ReactJSXElement>(e => 
+        // <div  key={e.id}>
+        //   <div>{e.date} <i>{e.description}</i></div>
+        //   {e.diagnosisCodes &&
+        //     <ul>
+        //       {e.diagnosisCodes.map(dc =>
+        //         <li key={dc}>{diagnoses[dc].code} {diagnoses[dc].name}</li>
+        //       )}
+        //     </ul>
+        //   }
+        // </div>
+        <EntryDetails key={e.id} entry={e} />
+      )}
     </>
   ) : <></>;
 };
