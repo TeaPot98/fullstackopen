@@ -16,6 +16,8 @@ export interface Patient {
 
 export type NewPatient = Omit<Patient, 'id'>;
 
+export type NewEntry = Omit<Entry, 'id'>;
+
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export enum Gender {
@@ -38,7 +40,7 @@ export enum HealthCheckRating {
   "CriticalRisk" = 3
 }
 
-interface Discharge {
+export interface Discharge {
   date: string,
   criteria: string,
 }
@@ -63,6 +65,8 @@ interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
   healthCheckRating: HealthCheckRating;
 }
+
+export type EntryType = "Hospital" | "OccupationalHealthcare" | "HealthCheck";
 
 export type Entry = 
   | HospitalEntry 

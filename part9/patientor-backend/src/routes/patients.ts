@@ -2,7 +2,7 @@
 import express from 'express';
 
 import patientService from '../services/patientService'; 
-import parsePatientEntry from '../utils';
+import { parsePatientEntry } from '../utils';
 
 const router = express.Router();
 
@@ -34,5 +34,9 @@ router.get('/:id', (req, res) => {
     res.sendStatus(404);
   }
 });
+
+// router.post('/:id/entries', (req, res) => {
+//   // const newEntry = 
+// });
 
 export default router;

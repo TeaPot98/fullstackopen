@@ -1,9 +1,9 @@
-import { Entry } from '../types';
+import { HealthCheckEntry } from '../types';
 
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-const HealthCheckEntryDetails = ({ entry }: { entry: Entry }) => {
+const HealthCheckEntryDetails = ({ entry }: { entry: HealthCheckEntry }) => {
   const styles = {
     container: {
       border: '1px solid black',

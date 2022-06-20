@@ -1,10 +1,10 @@
-import { NewPatient, Gender } from "./types";
+import { NewPatient, Gender, NewEntry, Diagnose, EntryType } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parsePatientEntry = (object: any): NewPatient => {
+export const parsePatientEntry = (object: any): NewPatient => {
   const newPatient : NewPatient = {
     name: parseName(object.name),
-    dateOfBirth: parseDateOfBirth(object.dateOfBirth),
+    dateOfBirth: parseDate(object.dateOfBirth),
     ssn: parseSSN(object.ssn),
     gender: parseGender(object.gender),
     occupation: parseOccupation(object.occupation),
@@ -19,6 +19,46 @@ const parsePatientEntry = (object: any): NewPatient => {
   return newPatient;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const parseHospitalEntry = (object: any): NewEntry => {
+  const newEntry: NewEntry = {
+    description: parseDescription(object.description),
+    date: parseDate(object.date),
+    specialist: parseName(object.specialist),
+    diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes),
+    type: parseHospitalEntryType(object.type),
+    // discharge: ,
+  };
+  return newEntry;
+};
+
+const parseHospitalEntryType = (type: unknown): EntryType => {
+  if (!type || !isString(type) || type !== "Hospital") {
+    throw new Error('Missing or incorrect type:' + type);
+  }
+  return type;
+};
+
+const parseDiagnosisCodes = (diagnosisCodes: unknown): Array<Diagnose['code']> => {
+  if (!diagnosisCodes || !Array.isArray(diagnosisCodes)) {
+    throw new Error('Missing or incorrect diagnosisCodes: ' + diagnosisCodes);
+  }
+  for (let i = 0; i < diagnosisCodes.length; i++) {
+    if (!isString(diagnosisCodes[i])) {
+      throw new Error('Incorrect diagnosisCodes: ' + diagnosisCodes);
+    }
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return diagnosisCodes;
+};
+
+const parseDescription = (description: unknown): string => {
+  if (!description || !isString(description)) {
+    throw new Error('Incorrect or missing description: ' + description);
+  }
+  return description;
+};
+
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
     throw new Error('Incorrect or missing name: ' + name);
@@ -30,9 +70,9 @@ const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
 
-const parseDateOfBirth = (date: unknown): string => {
+const parseDate = (date: unknown): string => {
   if (!date || !isString(date) || !isDate(date)) {
-    throw new Error('Incorrect or missing date of birth: ' + date);
+    throw new Error('Incorrect or missing date: ' + date);
   }
   return date;
 };
@@ -76,5 +116,3 @@ const parseOccupation = (occupation: unknown): string => {
   }
   return occupation;
 };
-
-export default parsePatientEntry;

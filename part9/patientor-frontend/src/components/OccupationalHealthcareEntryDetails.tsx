@@ -1,8 +1,8 @@
-import { Entry } from "../types";
+import { OccupationalHealthcareEntry } from "../types";
 
 import WorkIcon from '@mui/icons-material/Work';
 
-const OccupationalHealthcareEntryDetails = ({ entry }: { entry: Entry }) => {
+const OccupationalHealthcareEntryDetails = ({ entry }: { entry: OccupationalHealthcareEntry }) => {
   const styles = {
     container: {
       border: '1px solid black',

@@ -1,8 +1,8 @@
-import { Entry } from "../types";
+import { HospitalEntry } from "../types";
 
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 
-const HospitalEntryDetails = ({ entry }: { entry: Entry }) => {
+const HospitalEntryDetails = ({ entry }: { entry: HospitalEntry }) => {
   const styles = {
     container: {
       border: '1px solid black',
